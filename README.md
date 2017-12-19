@@ -10,11 +10,23 @@ Usage
 
 ```php
 <?php
-$loremIpsum = \Lorem\Ipsum\Generator::get();
+include ('vendor/autoload.php');
+
+$loremIpsum = new \Lorem\Ipsum\Generator();
+$loremIpsum->addParagraph(2)
+    ->addParagraph(8)
+    ->wrapAll('article', array('class'=>'lorem-ipsum'))
+    ->wrapParagraph(1, 'h1', array())
+    ->wrapParagraph(2, 'p', array('class'=>'lorem-ipsum'))
+    ->wrapWord(2, 6, 'span');
 echo $loremIpsum;
 ```
 
 Result:
-```
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+```html
+<article class="lorem-ipsum">
+<h1>Lorem ipsum</h1>
+<p class="lorem-ipsum">Lorem ipsum dolor sit amet, <span>consectetur<span> adipiscing elit</p>
+</article>
 ```
