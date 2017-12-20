@@ -1,13 +1,15 @@
+Lorem Ipsum
+===========
 
 Install
-=======
+-------
 
 ```
 composer require lorem/ipsum
 ```
 
 Usage
-=====
+-----
 
 ```php
 <?php
@@ -25,11 +27,11 @@ echo $loremIpsum;
 ```
 
 Result
-======
+------
 
 ```html
 <article class="lorem-ipsum">
 <h1>Lorem ipsum</h1>
-<p class="lorem-ipsum"><a href="https://packagist.org/packages/lorem/ipsum">Lorem ipsum dolor</a> sit amet, <span>consectetur<span> adipiscing elit</p>
+<p class="lorem-ipsum"><a href="https://packagist.org/packages/lorem/ipsum">Lorem ipsum dolor</a> sit amet, <span>consectetur</span> adipiscing elit</p>
 </article>
 ```
