@@ -13,6 +13,7 @@ Usage
 
 ```php
 <?php
+
 include ('vendor/autoload.php');
 
 $loremIpsum = new \Lorem\Ipsum\Generator();
