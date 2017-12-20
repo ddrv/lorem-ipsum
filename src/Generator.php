@@ -123,6 +123,7 @@ class Generator
         }
 
         $this->wrap[$paragraph][$word] = array(
+            'len' => 0,
             'tag' => '',
             'attributes' => array(),
         );
@@ -131,6 +132,48 @@ class Generator
             foreach ($attributes as $attribute=>$value) {
                 if(self::checkAttribute($attribute)) {
                     $this->wrap[$paragraph][$word]['attributes'][$attribute] = addslashes($value);
+                }
+            }
+
+        }
+        return $this;
+    }
+
+    /**
+     * @param integer $paragraph
+     * @param integer $start
+     * @param integer $len
+     * @param string $tag
+     * @param array $attributes
+     * @return $this
+     * @throws InvalidArgumentException
+     */
+    public function wrapWords($paragraph, $start, $len, $tag, $attributes=array())
+    {
+        if (!is_integer($paragraph)) {
+            throw new InvalidArgumentException('parameter paragraph must be integer');
+        }
+        if (!is_integer($start)) {
+            throw new InvalidArgumentException('parameter start must be integer');
+        }
+        if (!is_integer($len)) {
+            throw new InvalidArgumentException('parameter len must be integer');
+        }
+        if ($len<1) {
+            throw new InvalidArgumentException('parameter len must be positive integer');
+        }
+
+        $this->wrap[$paragraph][$start] = array(
+            'len' => $len,
+            'tag' => '',
+            'attributes' => array(),
+        );
+        if (self::checkTag($tag)) {
+            $this->wrap[$paragraph][$start]['len'] = $len;
+            $this->wrap[$paragraph][$start]['tag'] = $tag;
+            foreach ($attributes as $attribute=>$value) {
+                if(self::checkAttribute($attribute)) {
+                    $this->wrap[$paragraph][$start]['attributes'][$attribute] = addslashes($value);
                 }
             }
 
@@ -166,13 +209,16 @@ class Generator
                 foreach ($this->wrap[$paragraphIterator] as $key=>$wrap) {
                     if (isset($words[$key-1])) {
                         if (!empty($wrap['tag'])) {
-                            $word = '<' . $wrap['tag'];
+                            $openTag = '<' . $wrap['tag'];
                             foreach ($wrap['attributes'] as $attribute => $value) {
-                                $word .= ' ' . $attribute . '="' . $value . '"';
+                                $openTag .= ' ' . $attribute . '="' . $value . '"';
                             }
-                            $word .= '>'.$words[$key - 1];
-                            $word .= '<'.$wrap['tag'].'>';
-                            $words[$key - 1] = $word;
+                            $openTag .= '>';
+                            $words[$key - 1] = $openTag.$words[$key - 1];
+
+                            $closedTag = '</'.$wrap['tag'].'>';
+                            $last = isset($words[$key - 1 + $wrap['len']])?$key - 1 + $wrap['len']:(count($words)-1);
+                            $words[$last] .= $closedTag;
                         }
                     }
                 }
