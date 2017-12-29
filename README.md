@@ -37,3 +37,20 @@ Result
 <p class="lorem-ipsum"><a href="https://packagist.org/packages/lorem/ipsum">Lorem ipsum dolor</a> sit amet, <span>consectetur</span> adipiscing elit</p>
 </article>
 ```
+
+Usage with your text
+--------------------
+
+```php
+<?php
+
+include ('vendor/autoload.php');
+
+class MyLoremIpsum extends \Lorem\Ipsum\Generator
+{
+    protected $default = 'My text';
+}
+
+$loremIpsum = new MyLoremIpsum();
+
+```

@@ -10,6 +10,7 @@ use InvalidArgumentException;
  * @property array $text
  * @property array $words
  * @property array $wrap
+ * @property string $default
  */
 class Generator
 {
@@ -24,19 +25,27 @@ class Generator
     protected $wrap = array();
 
     /**
+     * @var string
+     */
+    protected $default = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+        ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+        in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+        cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+
+    /**
      * @var array
      */
-    protected $words = array(
-        'Lorem', 'ipsum', 'dolor', 'sit', 'amet,', 'consectetur', 'adipiscing', 'elit,', 'sed', 'do', 'eiusmod',
-        'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore magna', 'aliqua.', 'Ut', 'enim', 'ad', 'minim', 'veniam,',
-        'quis', 'nostrud', 'exercitation', 'ullamco', 'laboris', 'nisi', 'ut', 'aliquip', 'ex', 'ea', 'commodo',
-        'consequat.', 'Duis', 'aute', 'irure', 'dolor', 'in', 'reprehenderit', 'in', 'voluptate', 'velit', 'esse',
-        'cillum', 'dolore', 'eu', 'fugiat', 'nulla', 'pariatur.', 'Excepteur', 'sint', 'occaecat', 'cupidatat', 'non',
-        'proident,', 'sunt', 'in', 'culpa', 'qui', 'officia', 'deserunt', 'mollit', 'anim', 'id', 'est', 'laborum.'
-    );
+    protected $words = array();
 
+    /**
+     * Generator constructor.
+     */
     public function __construct()
     {
+        $this->default = preg_replace('/\n/ui','',$this->default);
+        $this->default = preg_replace('/[\t\s]+/ui',' ',$this->default);
+        $this->words = explode(' ',$this->default);
         return $this;
     }
 
@@ -48,7 +57,11 @@ class Generator
     public function addParagraph($wordsCount)
     {
         $wordsCount = (int)$wordsCount;
-        $words = empty($wordsCount)?$this->words:array_slice($this->words,0, $wordsCount);
+        $source = $this->words;
+        while ($wordsCount > count($source)) {
+            $source = array_merge($source, $this->words);
+        }
+        $words = empty($wordsCount)?$source:array_slice($source,0, $wordsCount);
         $this->text[] = $words;
         return $this;
     }
